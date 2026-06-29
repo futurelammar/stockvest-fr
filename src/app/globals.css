@@ -1,26 +1,84 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ── Light mode: deep forest greens + warm parchment (no pure white) ── */
+  --color-background: hsl(150 18% 91%);
+  --color-foreground: hsl(160 40% 8%);
+  --color-card: hsl(148 22% 87%);
+  --color-card-foreground: hsl(160 40% 8%);
+  --color-primary: hsl(152 55% 26%);
+  --color-primary-foreground: hsl(148 30% 94%);
+  --color-secondary: hsl(150 20% 82%);
+  --color-secondary-foreground: hsl(160 40% 8%);
+  --color-muted: hsl(150 18% 84%);
+  --color-muted-foreground: hsl(158 12% 36%);
+  --color-accent: hsl(38 48% 52%);
+  --color-accent-foreground: hsl(160 40% 8%);
+  --color-destructive: hsl(6 55% 38%);
+  --color-destructive-foreground: hsl(148 30% 94%);
+  --color-border: hsl(150 16% 76%);
+  --color-input: hsl(150 16% 76%);
+  --color-ring: hsl(152 55% 26%);
+  --radius: 0.5rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
   }
+
+  .dark {
+    color-scheme: dark;
+
+    /* ── Dark mode: deep emerald blacks + no white, cream text only ── */
+    --color-background: hsl(162 38% 5%);
+    --color-foreground: hsl(148 20% 88%);
+    --color-card: hsl(160 32% 8%);
+    --color-card-foreground: hsl(148 20% 88%);
+    --color-primary: hsl(152 48% 42%);
+    --color-primary-foreground: hsl(162 38% 5%);
+    --color-secondary: hsl(160 22% 12%);
+    --color-secondary-foreground: hsl(148 20% 88%);
+    --color-muted: hsl(160 22% 12%);
+    --color-muted-foreground: hsl(148 10% 58%);
+    --color-accent: hsl(38 52% 58%);
+    --color-accent-foreground: hsl(162 38% 5%);
+    --color-destructive: hsl(6 60% 48%);
+    --color-destructive-foreground: hsl(148 20% 88%);
+    --color-border: hsl(160 22% 15%);
+    --color-input: hsl(160 22% 15%);
+    --color-ring: hsl(152 48% 42%);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Scrollbar tinted green */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: hsl(160 22% 8%); }
+  ::-webkit-scrollbar-thumb { background: hsl(152 30% 22%); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(152 40% 32%); }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Ticker animation ─────────────────────────────────────────── */
+.ticker-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw-ticker 2.2s ease-out forwards;
+}
+
+@keyframes draw-ticker {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
 }
