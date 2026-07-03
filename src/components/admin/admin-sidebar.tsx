@@ -17,9 +17,10 @@ import {
 import { useAdminOverview } from "@/hooks/use-admin-dashboard";
 
 const NAV_ITEMS = [
-  { href: "/admin/overview", label: "Overview", icon: LayoutDashboard },
+  { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/plans", label: "Investment Plans", icon: TrendingUp },
+  { href: "/admin/investments", label: "Investments", icon: TrendingUp },
   { href: "/admin/stocks", label: "Stocks", icon: BarChart3 },
   { href: "/admin/deposits", label: "Deposits", icon: ArrowDownToLine, badgeKey: "deposits" as const },
   { href: "/admin/withdrawals", label: "Withdrawals", icon: ArrowUpFromLine, badgeKey: "withdrawals" as const },
@@ -44,7 +45,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         </span>
         <div>
           <p className="font-display text-base font-bold text-white">
-            Ledger<span className="text-emerald-300">.</span>
+            AutoBull<span className="text-emerald-300">.</span>
           </p>
           <p className="text-[10px] font-semibold uppercase tracking-widest text-emerald-300/80">Admin Panel</p>
         </div>

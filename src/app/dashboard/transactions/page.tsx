@@ -50,6 +50,7 @@ const TYPE_CONFIG: Record<
   profit: { label: "Profit", icon: TrendingUp, sign: "+", color: "text-[#1F6F4F]", bg: "bg-emerald-50" },
   withdrawal: { label: "Withdrawal", icon: ArrowUpFromLine, sign: "-", color: "text-[#A8392F]", bg: "bg-rose-50" },
   investment: { label: "Investment", icon: Wallet, sign: "-", color: "text-[#0E1A17]", bg: "bg-[#F7F4EE]" },
+  adjustment: { label: "Adjustment", icon: Receipt,         sign: "+", color: "text-[#5B6661]", bg: "bg-[#F7F4EE]"  },
 };
 /* ─────────────────────────────────────────
    Status badge

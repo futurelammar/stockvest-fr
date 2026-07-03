@@ -172,10 +172,12 @@ function HowItWorks() {
 
 // ─── Plans ────────────────────────────────────────────────────────
 function PlanCard({ plan }: { plan: any }) {
-  const roi    = plan.roiPercent ?? plan.roi ?? 0;
-  const days   = plan.durationDays ?? plan.duration ?? 0;
-  const minAmt = plan.minAmount ?? plan.minimumInvestment ?? 0;
-  const maxAmt = plan.maxAmount ?? plan.maximumInvestment ?? 0;
+  const roi    = plan.roiPercentage ?? plan.roiPercent ?? 0;
+  const days   = plan.durationInDays ?? plan.durationDays ?? 0;
+  const minAmt = plan.minimumInvestment ?? plan.minAmount ?? 0;
+  const maxAmt = plan.maximumInvestment ?? plan.maxAmount ?? 0;
+  const name   = plan.planName ?? plan.name ?? 'Investment Plan';
+  const image  = plan.featuredImage ?? plan.image;
 
   return (
     <div
@@ -184,49 +186,101 @@ function PlanCard({ plan }: { plan: any }) {
       onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,162,75,0.35)'; }}
       onMouseLeave={e => { e.currentTarget.style.borderColor = CARD_BORDER; }}
     >
-      {plan.image && (
-        <div className="h-40 overflow-hidden">
-          <img src={plan.image} alt={plan.name}
+      {/* Stock header — always shown since API populates stock */}
+      {plan.stock && (
+        <div
+          className="flex items-center justify-between border-b px-4 py-3"
+          style={{ background: 'rgba(14,26,23,0.6)', borderColor: 'rgba(31,111,79,0.15)' }}
+        >
+          <div className="flex items-center gap-2 min-w-0">
+            <div
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+              style={{ background: 'rgba(31,111,79,0.25)', color: '#6EBA9E' }}
+            >
+              {plan.stock.ticker?.slice(0, 2)}
+            </div>
+            <div className="min-w-0">
+              <p className="font-mono text-[10px] uppercase tracking-widest truncate" style={{ color: MUTED }}>
+                {plan.stock.ticker}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="font-mono text-xs font-semibold" style={{ color: CREAM }}>
+              ${plan.stock.currentPrice?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+            <span
+              className="rounded-full px-1.5 py-0.5 font-mono text-[10px] font-bold"
+              style={{
+                background: plan.stock.changePercent >= 0 ? 'rgba(31,111,79,0.2)' : 'rgba(168,57,47,0.2)',
+                color: plan.stock.changePercent >= 0 ? '#6EBA9E' : '#E07070',
+              }}
+            >
+              {plan.stock.changePercent >= 0 ? '+' : ''}{plan.stock.changePercent?.toFixed(2)}%
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Featured image */}
+      {image && !plan.stock && (
+        <div className="h-36 overflow-hidden">
+          <img src={image} alt={name}
             className="h-full w-full object-cover opacity-70 transition-transform duration-500 group-hover:scale-105" />
         </div>
       )}
-      <div className="flex flex-1 flex-col p-6">
-        <div className="mb-3 flex items-start justify-between">
-          <h3 className="font-semibold" style={{ color: CREAM }}>{plan.name}</h3>
+
+      <div className="flex flex-1 flex-col p-5">
+        {/* Plan name + ROI */}
+        <div className="mb-3 flex items-start justify-between gap-2">
+          <h3 className="font-display text-base font-bold leading-snug" style={{ color: CREAM }}>
+            {name}
+          </h3>
           <span
-            className="rounded-lg px-2.5 py-0.5 text-sm font-bold"
+            className="shrink-0 rounded-lg px-2.5 py-0.5 text-sm font-bold"
             style={{ background: 'rgba(31,111,79,0.2)', color: '#6EBA9E' }}
           >
             {roi}%
           </span>
         </div>
-        <p className="mb-5 flex-1 text-sm leading-relaxed line-clamp-2" style={{ color: MUTED }}>
+
+        <p className="mb-4 flex-1 text-xs leading-relaxed line-clamp-2" style={{ color: MUTED }}>
           {plan.description}
         </p>
+
+        {/* Stats grid */}
         <div
-          className="mb-5 grid grid-cols-2 gap-2 rounded-xl border p-3"
+          className="mb-4 grid grid-cols-2 gap-2 rounded-xl border p-3"
           style={{ background: 'rgba(14,26,23,0.5)', borderColor: 'rgba(31,111,79,0.15)' }}
         >
           {[
             ['Duration',   `${days} days`],
-            ['Min Invest', formatCurrency(minAmt)],
-            ['Max Invest', formatCurrency(maxAmt)],
-            ['Fixed ROI',  `${roi}%`],
+            ['ROI',        `${roi}% fixed`],
+            ['Min invest', `$${minAmt.toLocaleString()}`],
+            ['Max invest', `$${maxAmt.toLocaleString()}`],
           ].map(([l, v]) => (
-            <div key={l as string}>
-              <p className="text-xs" style={{ color: MUTED }}>{l}</p>
+            <div key={l}>
+              <p className="text-[10px] uppercase tracking-wide" style={{ color: MUTED }}>{l}</p>
               <p className="mt-0.5 text-xs font-semibold" style={{ color: CREAM }}>{v}</p>
             </div>
           ))}
         </div>
+
+        {/* Stock disclaimer */}
+        {plan.stock?.ticker && (
+          <p className="mb-3 text-[10px] leading-relaxed" style={{ color: 'rgba(168,181,160,0.6)' }}>
+            Inspired by {plan.stock.ticker} · returns are platform-determined
+          </p>
+        )}
+
         <Link
-          href="/register"
+          href={`/plans/${plan._id}`}
           className="block w-full rounded-xl py-2.5 text-center text-sm font-semibold transition-all duration-200"
           style={{ background: EMERALD, color: CREAM }}
           onMouseEnter={e => (e.currentTarget.style.background = '#196040')}
           onMouseLeave={e => (e.currentTarget.style.background = EMERALD)}
         >
-          Invest Now
+          View Plan
         </Link>
       </div>
     </div>
@@ -302,7 +356,7 @@ function Features() {
     <section className="py-24" style={{ background: 'rgba(14,26,23,0.97)' }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="Why Ledger"
+          eyebrow="Why AutoBull"
           title="Built for serious investors"
           subtitle="Everything you need to invest with confidence, nothing you don't."
         />
@@ -336,7 +390,7 @@ function Testimonials() {
   const { data } = useQuery({ queryKey: ['public-testimonials'], queryFn: fetchTestimonials });
   const items: any[] = data?.data ?? data ?? [];
   const defaults = [
-    { name: 'James O.',  role: 'Retail Investor',    rating: 5, content: 'Ledger gave me consistent 18% returns in 60 days. The dashboard is clean and deposits are fast.' },
+    { name: 'James O.',  role: 'Retail Investor',    rating: 5, content: 'AutoBull gave me consistent 18% returns in 60 days. The dashboard is clean and deposits are fast.' },
     { name: 'Aisha M.',  role: 'Day Trader',          rating: 5, content: 'Finally a platform that delivers on its promises. My withdrawal was processed in under 24 hours.' },
     { name: 'Carlos R.', role: 'Long-term Investor',  rating: 5, content: 'The Blue Chip plan has been my go-to for 6 months. Steady, reliable, fully transparent.' },
   ];
@@ -453,7 +507,7 @@ function CTABanner() {
               Ready to start earning?
             </h2>
             <p className="mx-auto mb-8 max-w-xl" style={{ color: MUTED }}>
-              Join thousands of investors already growing their wealth on Ledger.
+              Join thousands of investors already growing their wealth on AutoBull
               Create your free account and make your first investment today.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">

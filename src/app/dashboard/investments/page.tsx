@@ -406,10 +406,7 @@ function InvestmentDrawer({
           {inv.plan.stock && (
             <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
               <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-amber-600" />
-              <p className="text-[11px] leading-relaxed text-amber-800">
-                Plan inspired by {inv.plan.stock.ticker} · returns are
-                platform-determined, not brokered.
-              </p>
+              
             </div>
           )}
         </div>

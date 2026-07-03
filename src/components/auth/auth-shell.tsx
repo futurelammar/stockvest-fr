@@ -104,7 +104,7 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
               color: "#fff",
             }}
           >
-            Ledger
+            AutoBull
             <span style={{ color: "#34d399" }}>.</span>
           </span>
         </div>
@@ -328,7 +328,7 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
             textAlign: "center",
           }}
         >
-          © 2026 Ledger Capital. All rights reserved.
+          © 2026 AutoBull Capital. All rights reserved.
         </p>
       </div>
     </div>

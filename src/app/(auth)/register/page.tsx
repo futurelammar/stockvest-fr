@@ -69,7 +69,7 @@ export default function RegisterPage() {
           <br />
           reconciled
           <br />
-          like a ledger.
+          like a AutoBull
         </>
       }
       subtitle="Set minimums and maximums per plan, track maturity dates, and withdraw on your terms — all in one dashboard."

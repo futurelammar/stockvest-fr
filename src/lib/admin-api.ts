@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1";
 
 // ─── Cookie key (different from the user cookie so sessions don't clash) ─────
 const ADMIN_TOKEN_KEY = "admin_token";

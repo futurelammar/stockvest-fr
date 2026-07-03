@@ -27,7 +27,7 @@ export function StockLogo({
         className="rounded-full border border-border object-cover"
       />
     );
-  }
+  }   
 
   const bg = FALLBACK_PALETTE[paletteIndex(ticker)];
   return (
