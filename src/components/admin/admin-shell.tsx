@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { AdminSidebar } from "./admin-sidebar";
 import { AdminTopbar } from "./admin-topbar";
-import type { AuthUser } from "@/types/auth";
+import type { AdminUser } from "@/types/auth";
 
-export function AdminShell({ user, children }: { user: AuthUser; children: React.ReactNode }) {
+export function AdminShell({ user, children }: { user: AdminUser; children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
