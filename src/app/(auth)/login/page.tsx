@@ -46,8 +46,8 @@ export default function LoginPage() {
       }
       subtitle="Sign in to track active positions, review maturity dates, and move funds in or out of your account."
     >
-      <div className="mb-8 space-y-1.5">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-[#0E1A17]">Welcome back</h2>
+      <div className="mb-6 space-y-1.5 sm:mb-8">
+        <h2 className="font-display text-2xl font-bold tracking-tight text-[#0E1A17] sm:text-3xl">Welcome back</h2>
         <p className="text-sm text-[#5B6661]">
           New here?{" "}
           <Link href="/register" className="font-medium text-[#1F6F4F] underline-offset-4 hover:underline">
@@ -56,7 +56,7 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
         <div className="space-y-1.5">
           <Label htmlFor="email" className="text-sm font-medium text-[#0E1A17]">
             Email address
@@ -66,7 +66,7 @@ export default function LoginPage() {
         </div>
 
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-1">
             <Label htmlFor="password" className="text-sm font-medium text-[#0E1A17]">
               Password
             </Label>

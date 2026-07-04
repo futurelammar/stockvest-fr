@@ -30,26 +30,20 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
   const plansCount = plansData?.meta.total;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        minHeight: "100vh",
-        width: "100%",
-      }}
-    >
+    // BUG FIX: this was `style={{ flexDirection: "row" }}` with no
+    // responsive variant, forcing side-by-side panels on every screen size.
+    // Layout direction now lives in className so it can actually respond.
+    <div className="flex min-h-screen w-full flex-col lg:flex-row">
       {/* ══════════════════════════════════════
           LEFT PANEL — dark forest green
       ══════════════════════════════════════ */}
       <div
+        className="w-full flex-shrink-0 p-6 sm:p-10 lg:w-[52%] lg:px-14 lg:py-12"
         style={{
-          width: "52%",
-          flexShrink: 0,
           background: "#0E1A17",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "48px 56px",
           position: "relative",
           overflow: "hidden",
         }}
@@ -110,12 +104,13 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
         </div>
 
         <div
+          className="gap-6 lg:gap-8"
           style={{
             position: "relative",
             zIndex: 1,
             display: "flex",
             flexDirection: "column",
-            gap: "32px",
+            marginTop: "28px",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -145,7 +140,7 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
           <h1
             style={{
               fontFamily: "var(--font-display, serif)",
-              fontSize: "clamp(28px, 3vw, 44px)",
+              fontSize: "clamp(26px, 4.5vw, 44px)",
               fontWeight: 700,
               lineHeight: 1.18,
               color: "#fff",
@@ -193,8 +188,14 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
             ))}
           </div>
 
-          {/* ── Ticker strip — real prices ── */}
+          {/*
+            Ticker strip — kept for lg+ only. On mobile this pushed the
+            actual form far down the page before someone could log in;
+            it's marketing texture, not something worth the scroll on a
+            phone that opened this page to sign in.
+          */}
           <div
+            className="hidden lg:block"
             style={{
               borderRadius: "12px",
               border: "1px solid rgba(255,255,255,0.09)",
@@ -258,14 +259,21 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
           </div>
         </div>
 
+        {/*
+          Bottom stats grid — also lg+ only, same reasoning as the ticker.
+          Also fixed a pre-existing mismatch: grid was declared as 3
+          columns but only ever rendered 2 items, leaving a dangling
+          empty column. Now matches the actual item count.
+        */}
         <div
+          className="hidden lg:grid"
           style={{
             position: "relative",
             zIndex: 1,
-            display: "grid",
-            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateColumns: "repeat(2, 1fr)",
             gap: "16px",
             paddingTop: "24px",
+            marginTop: "24px",
             borderTop: "1px solid rgba(255,255,255,0.09)",
           }}
         >
@@ -306,6 +314,7 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
           RIGHT PANEL — form lives here
       ══════════════════════════════════════ */}
       <div
+        className="px-5 py-10 sm:px-10 sm:py-12 lg:px-16 lg:py-14"
         style={{
           flex: 1,
           background: "#F7F4EE",
@@ -313,7 +322,6 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          padding: "56px 64px",
           overflowY: "auto",
         }}
       >

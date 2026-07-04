@@ -33,12 +33,12 @@ export default function RegisterPage() {
     const email = registerUser.data?.email;
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#0E1A17] px-4">
-        <div className="w-full max-w-md space-y-6 rounded-2xl border border-white/10 bg-white/5 p-10 text-center backdrop-blur-sm">
+        <div className="w-full max-w-md space-y-6 rounded-2xl border border-white/10 bg-white/5 p-6 text-center backdrop-blur-sm sm:p-10">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/10 ring-1 ring-emerald-500/30">
             <MailCheck className="h-7 w-7 text-emerald-400" />
           </div>
           <div className="space-y-2">
-            <h2 className="font-display text-2xl font-semibold text-white">Check your inbox</h2>
+            <h2 className="font-display text-xl font-semibold text-white sm:text-2xl">Check your inbox</h2>
             <p className="text-sm leading-relaxed text-white/50">
               We sent a verification link to <span className="font-medium text-emerald-400">{email}</span>. Click
               it to activate your account, then come back to sign in.
@@ -74,8 +74,10 @@ export default function RegisterPage() {
       }
       subtitle="Set minimums and maximums per plan, track maturity dates, and withdraw on your terms — all in one dashboard."
     >
-      <div className="mb-8 space-y-1.5">
-        <h2 className="font-display text-3xl font-bold tracking-tight text-[#0E1A17]">Create your account</h2>
+      <div className="mb-6 space-y-1.5 sm:mb-8">
+        <h2 className="font-display text-2xl font-bold tracking-tight text-[#0E1A17] sm:text-3xl">
+          Create your account
+        </h2>
         <p className="text-sm text-[#5B6661]">
           Already a member?{" "}
           <Link href="/login" className="font-medium text-[#1F6F4F] underline-offset-4 hover:underline">
@@ -84,7 +86,7 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 sm:space-y-5">
         <div className="space-y-1.5">
           <Label htmlFor="fullName" className="text-sm font-medium text-[#0E1A17]">
             Full name
