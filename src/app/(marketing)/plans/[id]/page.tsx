@@ -118,7 +118,7 @@ function InvestModal({
 
           <div className="flex flex-col gap-2">
             <Link
-              href="/overview"
+              href="/dashboard"
               className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition-all"
               style={{ background: EMERALD, color: CREAM }}
               onMouseEnter={e => (e.currentTarget.style.background = "#196040")}
