@@ -92,3 +92,28 @@ export function useVerifyEmail() {
     },
   });
 }
+
+
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: async (email: string) => {
+      const { data } = await api.post("/auth/forgot-password", { email });
+      return data;
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Could not send reset email.");
+    },
+  });
+}
+
+export function useResetPassword() {
+  return useMutation({
+    mutationFn: async ({ token, newPassword }: { token: string; newPassword: string }) => {
+      const { data } = await api.post("/auth/reset-password", { token, newPassword });
+      return data;
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message || "Could not reset password.");
+    },
+  });
+}
