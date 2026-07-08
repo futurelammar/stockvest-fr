@@ -15,7 +15,7 @@ export function DashboardShell({ user, children }: { user: AuthUser; children: R
     <div className="min-h-screen bg-[#F7F4EE]">
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col bg-[#0E1A17] px-4 py-6 lg:flex">
         <Link href="/" className="mb-8 px-2 font-display text-xl font-bold text-white">
-          AutoBull<span className="text-emerald-400">.</span>
+          TorqBridge<span className="text-emerald-400">.</span>
         </Link>
         <SidebarNav />
         <div className="mt-auto rounded-lg border border-white/10 bg-white/5 p-4">
@@ -32,7 +32,7 @@ export function DashboardShell({ user, children }: { user: AuthUser; children: R
           <aside className="absolute inset-y-0 left-0 flex w-64 flex-col bg-[#0E1A17] px-4 py-6">
             <div className="mb-8 flex items-center justify-between px-2">
               <span className="font-display text-xl font-bold text-white">
-                AutoBull<span className="text-emerald-400">.</span>
+                TorqBridge<span className="text-emerald-400">.</span>
               </span>
               <button onClick={() => setMobileOpen(false)} aria-label="Close menu">
                 <X className="h-5 w-5 text-white/70" />

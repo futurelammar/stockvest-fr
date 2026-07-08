@@ -69,7 +69,7 @@ export default function RegisterPage() {
           <br />
           reconciled
           <br />
-          like a AutoBull
+          like a TorqBridge
         </>
       }
       subtitle="Set minimums and maximums per plan, track maturity dates, and withdraw on your terms — all in one dashboard."
@@ -91,7 +91,7 @@ export default function RegisterPage() {
           <Label htmlFor="fullName" className="text-sm font-medium text-[#0E1A17]">
             Full name
           </Label>
-          <Input id="fullName" placeholder="Caesar Okeke" autoComplete="name" className={inputClass} {...register("fullName")} />
+          <Input id="fullName" placeholder="" autoComplete="name" className={inputClass} {...register("fullName")} />
           {errors.fullName && <p className="text-xs text-destructive">{errors.fullName.message}</p>}
         </div>
 
@@ -99,7 +99,7 @@ export default function RegisterPage() {
           <Label htmlFor="email" className="text-sm font-medium text-[#0E1A17]">
             Email address
           </Label>
-          <Input id="email" type="email" placeholder="you@example.com" autoComplete="email" className={inputClass} {...register("email")} />
+          <Input id="email" type="email" placeholder="" autoComplete="email" className={inputClass} {...register("email")} />
           {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
         </div>
 

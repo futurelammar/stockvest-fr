@@ -1,54 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { Mail, Clock, ShieldCheck, CheckCircle2, Loader2, ArrowRight } from "lucide-react";
-
-type FormState = { name: string; email: string; subject: string; message: string };
-
-const SUBJECTS = ["Account & verification", "Deposits & withdrawals", "Investment plans", "Something else"];
-
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <label className="mb-2 block text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-      {children}
-    </label>
-  );
-}
-
-const inputClass =
-  "w-full rounded-lg border border-input bg-background px-3.5 py-3 text-sm text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-ring";
+import { Mail, Clock, ShieldCheck, ArrowRight } from "lucide-react";
 
 export default function ContactPage() {
-  const [form, setForm] = useState<FormState>({ name: "", email: "", subject: SUBJECTS[0], message: "" });
-  const [status, setStatus] = useState<"idle" | "sending" | "sent">("idle");
-  const [error, setError] = useState<string | null>(null);
-
-  function update<K extends keyof FormState>(key: K, value: FormState[K]) {
-    setForm((f) => ({ ...f, [key]: value }));
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-
-    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
-      setError("Fill in your name, email, and message before sending.");
-      return;
-    }
-
-    setStatus("sending");
-    try {
-      // TODO: wire to a real endpoint, e.g.:
-      // await api.post("/contact", form);
-      await new Promise((r) => setTimeout(r, 700));
-      setStatus("sent");
-    } catch {
-      setError("Couldn't send that. Please try again in a moment.");
-      setStatus("idle");
-    }
-  }
-
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* ── Header band ── */}
@@ -70,113 +25,16 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ── Body ── */}
+      {/* ── Info cards ── */}
       <section className="px-4 py-12 sm:px-6 sm:py-16">
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-8 lg:grid-cols-[1.3fr_1fr]">
-          {/* ── Form ── */}
-          <div className="rounded-xl border border-border bg-card p-6 sm:p-8">
-            {status === "sent" ? (
-              <div className="flex flex-col items-center py-10 text-center">
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary/15">
-                  <CheckCircle2 className="h-7 w-7 text-primary" />
-                </div>
-                <h2 className="font-display text-xl font-bold text-card-foreground">Message sent</h2>
-                <p className="mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
-                  We've got it. Expect a reply at{" "}
-                  <span className="font-medium text-card-foreground">{form.email}</span> within a day.
-                </p>
-                <button
-                  onClick={() => {
-                    setForm({ name: "", email: "", subject: SUBJECTS[0], message: "" });
-                    setStatus("idle");
-                  }}
-                  className="mt-6 text-sm font-semibold text-primary hover:underline"
-                >
-                  Send another message
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                <div className="mb-5 grid grid-cols-1 gap-5 sm:grid-cols-2">
-                  <div>
-                    <FieldLabel>Name</FieldLabel>
-                    <input
-                      className={inputClass}
-                      value={form.name}
-                      onChange={(e) => update("name", e.target.value)}
-                      placeholder="Jordan Reyes"
-                    />
-                  </div>
-                  <div>
-                    <FieldLabel>Email</FieldLabel>
-                    <input
-                      type="email"
-                      className={inputClass}
-                      value={form.email}
-                      onChange={(e) => update("email", e.target.value)}
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-5">
-                  <FieldLabel>What's this about</FieldLabel>
-                  <div className="flex flex-wrap gap-2">
-                    {SUBJECTS.map((s) => {
-                      const active = form.subject === s;
-                      return (
-                        <button
-                          type="button"
-                          key={s}
-                          onClick={() => update("subject", s)}
-                          className={`rounded-full border px-3.5 py-2 text-xs font-semibold transition-colors ${
-                            active
-                              ? "border-primary bg-primary/10 text-foreground"
-                              : "border-border bg-secondary text-muted-foreground hover:text-foreground"
-                          }`}
-                        >
-                          {s}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <div className="mb-5">
-                  <FieldLabel>Message</FieldLabel>
-                  <textarea
-                    className={`${inputClass} min-h-[140px] resize-y`}
-                    value={form.message}
-                    onChange={(e) => update("message", e.target.value)}
-                    placeholder="Tell us what's going on…"
-                  />
-                </div>
-
-                {error && <p className="mb-4 text-sm text-destructive">{error}</p>}
-
-                <button
-                  type="submit"
-                  disabled={status === "sending"}
-                  className="inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3 text-sm font-bold uppercase tracking-wide text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-                >
-                  {status === "sending" ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" /> Sending…
-                    </>
-                  ) : (
-                    <>
-                      Send message <ArrowRight className="h-4 w-4" />
-                    </>
-                  )}
-                </button>
-              </form>
-            )}
-          </div>
-
-          {/* ── Side info ── */}
-          <div className="flex flex-col gap-4">
+        <div className="mx-auto max-w-5xl">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {[
-              { icon: Mail, title: "Email us directly", body: "support@autobull.example" },
+              {
+                icon: Mail,
+                title: "Email us directly",
+                body: "support@torqbridge.com",
+              },
               {
                 icon: Clock,
                 title: "Response time",
@@ -196,15 +54,15 @@ export default function ContactPage() {
                 <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
               </div>
             ))}
-
-            <Link
-              href="/faq"
-              className="flex items-center justify-between rounded-xl border border-primary/25 bg-primary/5 px-5 py-4 no-underline"
-            >
-              <span className="text-sm font-semibold text-foreground">Check the FAQ first — quick answers</span>
-              <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
-            </Link>
           </div>
+
+          <Link
+            href="/faq"
+            className="mt-4 flex items-center justify-between rounded-xl border border-primary/25 bg-primary/5 px-5 py-4 no-underline"
+          >
+            <span className="text-sm font-semibold text-foreground">Check the FAQ first — quick answers</span>
+            <ArrowRight className="h-4 w-4 shrink-0 text-primary" />
+          </Link>
         </div>
       </section>
     </div>

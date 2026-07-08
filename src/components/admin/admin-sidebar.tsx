@@ -45,7 +45,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
         </span>
         <div>
           <p className="font-display text-base font-bold text-white">
-            AutoBull<span className="text-emerald-300">.</span>
+            TorqBridge<span className="text-emerald-300">.</span>
           </p>
           <p className="text-[10px] font-semibold uppercase tracking-widest text-emerald-300/80">Admin Panel</p>
         </div>

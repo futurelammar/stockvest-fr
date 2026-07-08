@@ -7,7 +7,7 @@ const FOOTER_COLUMNS = [
     links: [
       { label: "Investment Plans", href: "/plans" },
       { label: "Stocks", href: "/stocks" },
-      { label: "How it works", href: "/about" },
+      { label: "How it works", href: "/works" },
     ],
   },
   {
@@ -32,7 +32,7 @@ const FOOTER_COLUMNS = [
 // lucide-react versions, which is likely why only one of the four icons
 // rendered last time.
 const SOCIALS = [
-  { icon: Mail, href: "mailto:support@AutoBullapp", label: "Email" },
+  { icon: Mail, href: "mailto:support@TorqBridgeapp", label: "Email" },
   { icon: Globe, href: "#", label: "Website" },
   { icon: MessageCircle, href: "#", label: "Chat" },
   { icon: Share2, href: "#", label: "Share" },
@@ -50,7 +50,7 @@ export function SiteFooter() {
                 <TrendingUp className="h-4 w-4 text-[#0B241B]" />
               </span>
               <span className="font-display text-lg font-bold tracking-tight text-white">
-                Auto<span style={{ color: "#C0392B" }}>Bull</span>
+                Torq<span style={{ color: "#C0392B" }}>Bridge</span>
               </span>
             </Link>
             <p className="max-w-xs text-sm leading-relaxed text-white/55">
@@ -89,7 +89,7 @@ export function SiteFooter() {
 
         {/* Bottom bar */}
         <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-emerald-400/20 pt-6 text-center sm:flex-row sm:text-left">
-          <p className="text-xs text-white/45">© {new Date().getFullYear()} AutoBull Capital. All rights reserved.</p>
+          <p className="text-xs text-white/45">© {new Date().getFullYear()} TorqBridge Capital. All rights reserved.</p>
           <p className="text-xs text-white/45">Plans are platform-determined · returns are not brokered against real markets.</p>
         </div>
       </div>

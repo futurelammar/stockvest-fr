@@ -98,7 +98,7 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
               color: "#fff",
             }}
           >
-            AutoBull
+            TorqBridge
             <span style={{ color: "#34d399" }}>.</span>
           </span>
         </div>
@@ -336,7 +336,7 @@ export function AuthShell({ eyebrow, title, subtitle, children }: AuthShellProps
             textAlign: "center",
           }}
         >
-          © 2026 AutoBull Capital. All rights reserved.
+          © 2026 TorqBridge Capital. All rights reserved.
         </p>
       </div>
     </div>

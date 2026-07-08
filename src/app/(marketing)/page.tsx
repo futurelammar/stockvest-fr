@@ -356,7 +356,7 @@ function Features() {
     <section className="py-24" style={{ background: 'rgba(14,26,23,0.97)' }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="Why AutoBull"
+          eyebrow="Why TorqBridge"
           title="Built for serious investors"
           subtitle="Everything you need to invest with confidence, nothing you don't."
         />
@@ -390,7 +390,7 @@ function Testimonials() {
   const { data } = useQuery({ queryKey: ['public-testimonials'], queryFn: fetchTestimonials });
   const items: any[] = data?.data ?? data ?? [];
   const defaults = [
-    { name: 'James O.',  role: 'Retail Investor',    rating: 5, content: 'AutoBull gave me consistent 18% returns in 60 days. The dashboard is clean and deposits are fast.' },
+    { name: 'James O.',  role: 'Retail Investor',    rating: 5, content: 'TorqBridge gave me consistent 18% returns in 60 days. The dashboard is clean and deposits are fast.' },
     { name: 'Aisha M.',  role: 'Day Trader',          rating: 5, content: 'Finally a platform that delivers on its promises. My withdrawal was processed in under 24 hours.' },
     { name: 'Carlos R.', role: 'Long-term Investor',  rating: 5, content: 'The Blue Chip plan has been my go-to for 6 months. Steady, reliable, fully transparent.' },
   ];
@@ -507,7 +507,7 @@ function CTABanner() {
               Ready to start earning?
             </h2>
             <p className="mx-auto mb-8 max-w-xl" style={{ color: MUTED }}>
-              Join thousands of investors already growing their wealth on AutoBull
+              Join thousands of investors already growing their wealth on TorqBridge
               Create your free account and make your first investment today.
             </p>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">

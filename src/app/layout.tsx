@@ -24,7 +24,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AutoBull — Stock Investment Platform",
+  title: "TorqBridge — Stock Investment Platform",
   description: "Invest in curated stock plans, funded by crypto, grown with discipline.",
 };
 
