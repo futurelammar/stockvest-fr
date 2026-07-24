@@ -153,7 +153,7 @@ export default function AdminUsersPage() {
             users.map((u) => (
               <Link
                 key={u._id}
-                href={`/admin/users/${u._id}`}
+                href={`users/${u._id}`}
                 className="grid grid-cols-1 gap-2 border-b border-[#F1EDE2] px-5 py-4 last:border-0 transition-colors hover:bg-[#FAFAF7] lg:grid-cols-[1fr_120px_120px_140px_110px] lg:items-center lg:gap-4"
               >
                 {/* User */}

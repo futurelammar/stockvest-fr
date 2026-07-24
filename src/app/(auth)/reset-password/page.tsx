@@ -151,7 +151,7 @@ function ResetPasswordContent() {
               You're all set
             </h2>
             <p style={{ fontSize: "14px", color: "#5B6661", lineHeight: 1.6 }}>
-              Your password has been updated. Sign in with your new password to access your TorqBridge dashboard.
+              Your password has been updated. Sign in with your new password to access your Pitlane Markets dashboard.
             </p>
           </div>
           <Link
@@ -281,7 +281,7 @@ function ResetPasswordContent() {
           Create new password
         </h2>
         <p style={{ fontSize: "14px", color: "#5B6661" }}>
-          This will replace your current TorqBridge password immediately.
+          This will replace your current Pitlane Markets password immediately.
         </p>
       </div>
 

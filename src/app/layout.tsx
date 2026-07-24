@@ -24,8 +24,8 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TorqBridge — Stock Investment Platform",
-  description: "Invest in curated stock plans, funded by crypto, grown with discipline.",
+  title: "Pitlane Markets",
+  description: "Invest in the world's leading automotive stocks",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

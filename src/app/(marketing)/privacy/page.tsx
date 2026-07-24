@@ -59,7 +59,7 @@ export default function PrivacyPage() {
         </nav>
 
         <p className="mb-8 text-sm leading-relaxed text-muted-foreground">
-          This Privacy Policy explains how TorqBridge ("we", "us") collects, uses, and protects your information
+          This Privacy Policy explains how Pitlane Markets ("we", "us") collects, uses, and protects your information
           when you use our website, dashboard, and related services (the "Platform"). By using the Platform, you
           agree to the collection and use of information as described here.
         </p>

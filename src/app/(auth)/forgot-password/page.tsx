@@ -132,7 +132,7 @@ export default function ForgotPasswordPage() {
           <span style={{ color: "#C0392B" }}>password?</span>
         </>
       }
-      subtitle="No problem. Enter the email on your TorqBridge account and we'll send you a reset link."
+      subtitle="No problem. Enter the email on your Pitlane Markets account and we'll send you a reset link."
     >
       <div className="mb-8 space-y-1.5">
         <h2

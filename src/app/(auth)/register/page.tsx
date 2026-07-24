@@ -69,7 +69,7 @@ export default function RegisterPage() {
           <br />
           reconciled
           <br />
-          like a TorqBridge
+          like a Pitlane Markets
         </>
       }
       subtitle="Set minimums and maximums per plan, track maturity dates, and withdraw on your terms — all in one dashboard."

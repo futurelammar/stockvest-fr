@@ -65,7 +65,7 @@ function Hero() {
               className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-widest"
               style={{ borderColor: 'rgba(201,162,75,0.3)', background: 'rgba(201,162,75,0.07)', color: GOLD }}
             >
-              <Car className="h-3.5 w-3.5" /> About TorqBridge
+              <Car className="h-3.5 w-3.5" /> About Pitlane Markets
             </div>
             <h1
               className="font-display text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl mb-6"
@@ -77,7 +77,7 @@ function Hero() {
               <span style={{ color: GOLD }}>investment</span>
             </h1>
             <p className="text-lg leading-relaxed mb-8" style={{ color: MUTED }}>
-              TorqBridge is the first crypto-funded investment platform built entirely around
+              Pitlane Markets is the first crypto-funded investment platform built entirely around
               the automotive industry — from blue-chip automakers to EV pioneers, parts
               suppliers, and mobility tech. We turn car market performance into structured,
               fixed-return investment plans for everyday investors.
@@ -155,7 +155,7 @@ function Mission() {
             >
               <p className="font-display text-2xl font-bold leading-snug" style={{ color: INK }}>
                 &ldquo;The automotive sector is one of the most stable, most-watched, and most
-                misunderstood investment categories in the world. We built TorqBridge to make it
+                misunderstood investment categories in the world. We built Pitlane Markets to make it
                 accessible to everyone.&rdquo;
               </p>
               <div className="mt-6 flex items-center gap-3">
@@ -166,7 +166,7 @@ function Mission() {
                   AB
                 </div>
                 <div>
-                  <p className="text-sm font-semibold" style={{ color: INK }}>TorqBridge Team</p>
+                  <p className="text-sm font-semibold" style={{ color: INK }}>Pitlane Markets Team</p>
                   <p className="text-xs" style={{ color: SLATE }}>Founders</p>
                 </div>
               </div>
@@ -186,7 +186,7 @@ function Mission() {
             </h2>
             <div className="space-y-4" style={{ color: SLATE }}>
               <p className="leading-relaxed">
-                TorqBridge was founded on a simple observation: the automotive industry touches
+                Pitlane Markets was founded on a simple observation: the automotive industry touches
                 every corner of the global economy — manufacturing, energy, technology, supply
                 chains — yet most retail investors have no structured way to participate in its
                 growth.
@@ -251,7 +251,7 @@ function Difference() {
         <SectionHeader
           eyebrow="What sets us apart"
           title="Built differently, on purpose"
-          subtitle="We made deliberate choices that make TorqBridge unlike any other investment platform you've used."
+          subtitle="We made deliberate choices that make Pitlane Markets unlike any other investment platform you've used."
         />
         <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {items.map(({ icon: Icon, title, desc }) => (
@@ -295,7 +295,7 @@ function Sectors() {
         <SectionHeader
           eyebrow="Sectors we cover"
           title="The full automotive value chain"
-          subtitle="Every plan on TorqBridge maps to a real corner of the automotive industry — not just carmakers."
+          subtitle="Every plan on Pitlane Markets maps to a real corner of the automotive industry — not just carmakers."
         />
         <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sectors.map(({ name, desc, icon: Icon }) => (
@@ -445,7 +445,7 @@ function Trust() {
     <section className="py-24" style={{ background: '#071210' }}>
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="Why trust TorqBridge"
+          eyebrow="Why trust Pitlane Markets"
           title="We designed trust into the structure"
           subtitle="Not just a promise — actual product decisions that protect your money."
         />

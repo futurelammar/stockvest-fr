@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
             <TrendingUp size={16} style={{ color: "#C9A24B" }} />
           </div>
           <span style={{ fontFamily: "var(--font-display, serif)", fontSize: "20px", fontWeight: 700, color: "#fff" }}>
-            TorqBridge<span style={{ color: "#34d399" }}>.</span>
+            Pitlane Markets<span style={{ color: "#34d399" }}>.</span>
           </span>
           <span style={{
             fontSize: "9px", fontWeight: 700, letterSpacing: "0.14em",
@@ -136,7 +136,7 @@ export default function AdminLoginPage() {
           borderTop: "1px solid rgba(255,255,255,0.08)",
         }}>
           <p style={{ fontSize: "11px", color: "rgba(255,255,255,0.22)" }}>
-            © {new Date().getFullYear()} TorqBridge Capital. Admin access only.
+            © {new Date().getFullYear()} Pitlane Markets Capital. Admin access only.
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: "5px", fontSize: "11px", color: "rgba(255,255,255,0.22)" }}>
             <Lock size={11} style={{ color: "#34d399" }} />
@@ -154,7 +154,7 @@ export default function AdminLoginPage() {
         {/* Mobile logo */}
         <div className="lg:hidden" style={{ marginBottom: "32px", alignSelf: "flex-start" }}>
           <span style={{ fontFamily: "var(--font-display, serif)", fontSize: "20px", fontWeight: 700, color: "#0E1A17" }}>
-            TorqBridge<span style={{ color: "#1F6F4F" }}>.</span>
+            Pitlane Markets<span style={{ color: "#1F6F4F" }}>.</span>
           </span>
           <span style={{ marginLeft: "8px", fontSize: "10px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#5B6661" }}>
             Admin

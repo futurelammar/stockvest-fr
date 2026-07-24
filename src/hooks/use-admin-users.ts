@@ -149,3 +149,18 @@ export function useAdminUsersList(params: QueryUsersParams = {}) {
     },
   });
 }
+
+export function useDeleteUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) =>
+      adminApi.delete(`/users/admin/${id}/delete`).then((r) => r.data),
+    onSuccess: () => {
+      toast.success("User deleted permanently.");
+      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
+    },
+    onError: (err: any) =>
+      toast.error(err?.response?.data?.message || "Failed to delete user."),
+  });
+}

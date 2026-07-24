@@ -72,7 +72,7 @@ const SETTING_SCHEMAS: {
     key: "site_meta",
     label: "Site Meta",
     fields: [
-      { name: "siteName", label: "Platform name", placeholder: "TorqBridge" },
+      { name: "siteName", label: "Platform name", placeholder: "Pitlane Markets" },
       { name: "tagline", label: "Tagline", placeholder: "Curated stock plans, funded in crypto" },
       { name: "disclaimer", label: "Legal disclaimer", placeholder: "Plans are platform-determined, not brokered.", multiline: true },
     ],

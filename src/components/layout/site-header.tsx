@@ -29,7 +29,7 @@ export function SiteHeader() {
         <TrendingUp className="h-4 w-4 text-[#0B241B]" />
       </span>
       <span className="font-display text-lg font-bold tracking-tight text-white sm:text-xl">
-        Torq<span style={{ color: "#C0392B" }}>Bridge</span>
+        Pitlane<span style={{ color: "#C0392B" }}>Markets</span>
       </span>
     </Link>
   );

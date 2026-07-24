@@ -198,7 +198,7 @@ export function AuthLeftPanel({
       {/* Logo */}
       <div className="relative z-10">
         <span className="font-display text-2xl font-bold tracking-tight text-white">
-          TorqBridge<span className="text-emerald-400">.</span>
+          Pitlane Markets<span className="text-emerald-400">.</span>
         </span>
       </div>
 

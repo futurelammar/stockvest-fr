@@ -60,7 +60,7 @@ export default function TermsPage() {
         </nav>
 
         <p className="mb-8 text-sm leading-relaxed text-muted-foreground">
-          These Terms of Service ("Terms") govern your access to and use of TorqBridge's website, dashboard, and
+          These Terms of Service ("Terms") govern your access to and use of Pitlane Markets's website, dashboard, and
           related services (the "Platform"). By creating an account or using the Platform, you agree to be bound
           by these Terms. If you do not agree, do not use the Platform.
         </p>
@@ -107,7 +107,7 @@ export default function TermsPage() {
             Investment plans offered on the Platform carry a fixed, platform-determined return of investment
             (ROI) and maturity period, as described on each plan's page at the time of investment. Plans are{" "}
             <strong className="text-foreground">not brokered against real market positions</strong> — returns are
-            set by TorqBridge and are not derived from trading the underlying referenced stock or asset.
+            set by Pitlane Markets and are not derived from trading the underlying referenced stock or asset.
           </p>
           <p>
             All investments carry risk, including the risk of loss of principal. Past performance of any plan is
@@ -158,7 +158,7 @@ export default function TermsPage() {
 
         <Section n={9} title="Limitation of Liability">
           <p>
-            To the maximum extent permitted by law, TorqBridge and its affiliates shall not be liable for any
+            To the maximum extent permitted by law, Pitlane Markets and its affiliates shall not be liable for any
             indirect, incidental, special, or consequential damages arising from your use of the Platform,
             including but not limited to loss of funds due to market volatility, third-party wallet or exchange
             failures, or events outside our reasonable control.
@@ -167,7 +167,7 @@ export default function TermsPage() {
 
         <Section n={10} title="Governing Law">
           <p>
-            These Terms are governed by the laws of the jurisdiction in which TorqBridge is incorporated, without
+            These Terms are governed by the laws of the jurisdiction in which Pitlane Markets is incorporated, without
             regard to conflict-of-law principles. Any disputes arising from these Terms shall be resolved in the
             courts of that jurisdiction, unless otherwise required by applicable law.
           </p>
