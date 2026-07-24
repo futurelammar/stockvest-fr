@@ -25,7 +25,7 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: "Pitlane Markets",
-  description: "Invest in the world's leading automotive stocks",
+  description: "world's leading automotive stocks",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
