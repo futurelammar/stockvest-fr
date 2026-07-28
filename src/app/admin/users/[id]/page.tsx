@@ -19,6 +19,7 @@ import {
   ArrowUpFromLine,
   BadgeCheck,
   ShieldAlert,
+  Trash2
 } from "lucide-react";
 import {
   useAdminUser,
@@ -31,6 +32,7 @@ import {
   useUnblockWithdrawals,
   useAdjustBalance,
   useUpdateUserRole,
+  useDeleteUser 
 } from "@/hooks/use-admin-users";
 import { ConfirmActionDialog } from "@/components/admin/confirm-action-dialog";
 import { AdjustBalanceDialog } from "@/components/admin/adjust-balance-dialog";
@@ -75,6 +77,8 @@ export default function AdminUserDetailPage() {
   const unblockWithdrawals = useUnblockWithdrawals(userId);
   const adjustBalance = useAdjustBalance(userId);
   const updateRole = useUpdateUserRole(userId);
+  const deleteUser = useDeleteUser(userId);
+ const [deletingUser, setDeletingUser] = useState(false);
 
   function closeDialog() {
     setDialog({ type: null });
@@ -247,6 +251,15 @@ export default function AdminUserDetailPage() {
               <ShieldOff className="h-4 w-4" /> Demote to user
             </button>
           )}
+          {/* Danger zone separator */}
+        <div className="h-px w-full bg-rose-100 my-1" />
+
+        <button
+          onClick={() => setDeletingUser(true)}
+          className="flex items-center gap-2 rounded-lg border border-[#A8392F]/40 bg-rose-50 px-3.5 py-2 text-sm font-medium text-[#A8392F] transition-colors hover:bg-rose-100"
+        >
+          <Trash2 className="h-4 w-4" /> Delete account
+        </button>
         </div>
       </div>
 
@@ -422,6 +435,17 @@ export default function AdminUserDetailPage() {
         currentBalance={user.balance}
         loading={adjustBalance.isPending}
       />
+
+      <ConfirmActionDialog
+      open={deletingUser}
+      onClose={() => setDeletingUser(false)}
+      onConfirm={() => deleteUser.mutate()}
+      title="Permanently delete this user?"
+      description={`This will delete ${user?.fullName}'s account and cannot be undone. Their investments, deposits, withdrawals, and transaction history will remain in the database for record-keeping but this account will no longer be accessible.`}
+      confirmLabel="Delete permanently"
+      tone="danger"
+      loading={deleteUser.isPending}
+    />
     </div>
   );
 }

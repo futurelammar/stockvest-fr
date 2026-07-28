@@ -15,7 +15,7 @@ export default function MarketingLayout({ children }: { children: React.ReactNod
           (function(){
             var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
             s1.async=true;
-            s1.src='https://embed.tawk.to/68fafc7d511129194ce133f1/1j8a6kiq2';
+            s1.src='https://embed.tawk.to/6a686d1db6c95f1d4221afef/1jujukf4f';
             s1.charset='UTF-8';
             s1.setAttribute('crossorigin','*');
             s0.parentNode.insertBefore(s1,s0);

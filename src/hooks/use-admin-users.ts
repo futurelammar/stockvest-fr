@@ -8,6 +8,7 @@ import type { PaginatedResponse } from "@/types/stock";
 import type { Investment } from "@/types/investment";
 import type { Deposit } from "@/types/deposit";
 import type { Withdrawal } from "@/types/withdrawal";
+import { useRouter } from "next/navigation";
 
 export function useAdminUser(id: string) {
   return useQuery({
@@ -150,15 +151,17 @@ export function useAdminUsersList(params: QueryUsersParams = {}) {
   });
 }
 
-export function useDeleteUser() {
+export function useDeleteUser(id: string) {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
-    mutationFn: (id: string) =>
+    mutationFn: () =>
       adminApi.delete(`/users/admin/${id}/delete`).then((r) => r.data),
     onSuccess: () => {
-      toast.success("User deleted permanently.");
+      toast.success("User permanently deleted.");
       queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
       queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
+      router.push("/admin/users");
     },
     onError: (err: any) =>
       toast.error(err?.response?.data?.message || "Failed to delete user."),
