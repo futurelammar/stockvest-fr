@@ -20,6 +20,25 @@
   --color-input: hsl(150 16% 76%);
   --color-ring: hsl(152 55% 26%);
   --radius: 0.5rem;
+
+  /*
+    Brand palette — moved here from tailwind.config.ts. In Tailwind v4,
+    the JS config file is only loaded if globals.css has an explicit
+    `@config "path/to/tailwind.config.ts";` directive, which this file
+    doesn't have. Without it, classes like bg-brand-emerald and
+    text-brand-ink silently produce no CSS — which is exactly why the
+    "Continue to sign in" button was invisible (white text sitting on
+    a background color that was never actually applied). Defining
+    these directly as @theme tokens is the native v4 way and
+    guarantees they always generate real utility classes.
+  */
+  --color-brand-ink: #0E1A17;
+  --color-brand-bone: #F7F4EE;
+  --color-brand-emerald: #1F6F4F;
+  --color-brand-emerald-light: #2E9468;
+  --color-brand-gold: #C9A24B;
+  --color-brand-ruby: #A8392F;
+  --color-brand-slate: #5B6661;
 }
 
 @layer base {
