@@ -33,7 +33,7 @@ export default function ContactPage() {
               {
                 icon: Mail,
                 title: "Email us directly",
-                body: "support@torqbridge.com",
+                body: "support@pitlanemarkets.com — include your account email for faster verification.",
               },
               {
                 icon: Clock,
