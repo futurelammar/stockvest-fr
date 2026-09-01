@@ -43,7 +43,7 @@ function fmtDate(iso: string) {
    Status badge
 ───────────────────────────────────────── */
 function StatusBadge({ status }: { status: DepositStatus }) {
-  const map: Record(
+  const map: Record
     DepositStatus,
     { label: string; bg: string; text: string; icon: React.ReactNode }
   > = {
