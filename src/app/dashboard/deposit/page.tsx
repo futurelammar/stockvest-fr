@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useRef, useCallback } from "react";
@@ -107,6 +106,49 @@ function CopyButton({ text }: { text: string }) {
         </>
       )}
     </button>
+  );
+}
+
+/* ─────────────────────────────────────────
+   QR Code Modal (click to enlarge)
+───────────────────────────────────────── */
+function QRCodeModal({
+  src,
+  coinName,
+  onClose,
+}: {
+  src: string;
+  coinName: string;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+      onClick={onClose}
+    >
+      <div
+        className="relative rounded-2xl bg-white p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -right-3 -top-3 flex h-8 w-8 items-center justify-center rounded-full bg-[#0E1A17] text-white hover:bg-[#1a2b26]"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <p className="mb-4 text-center text-sm font-semibold text-[#0E1A17]">
+          Scan to send {coinName}
+        </p>
+        <Image
+          src={src}
+          alt={`${coinName} QR code`}
+          width={320}
+          height={320}
+          className="h-80 w-80 rounded-lg object-contain"
+        />
+      </div>
+    </div>
   );
 }
 
@@ -282,6 +324,7 @@ function DepositForm() {
   const [preview, setPreview] = useState<string | null>(null);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const [amountError, setAmountError] = useState("");
+  const [qrModalOpen, setQrModalOpen] = useState(false);
 
   // Filter by status === "active" — matching the real backend enum value
   const activeWallets = (wallets ?? []).filter((w) => w.status === "active");
@@ -395,20 +438,53 @@ function DepositForm() {
             <p className="text-xs font-semibold uppercase tracking-wider text-[#1F6F4F]">
               Send {selectedWallet.network} to this address
             </p>
-            <div className="flex items-center gap-3 rounded-lg border border-[#D6D0C4] bg-white px-4 py-3">
-              <p className="flex-1 break-all font-mono text-sm text-[#0E1A17]">
-                {selectedWallet.walletAddress}
-              </p>
-              <CopyButton text={selectedWallet.walletAddress} />
-            </div>
-            <div className="flex items-start gap-2">
-              <Info className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-amber-600" />
-              <p className="text-[11px] leading-relaxed text-amber-800">
-                Only send {selectedWallet.coinName} ({selectedWallet.network}) to this
-                address. Sending the wrong asset may result in permanent loss.
-              </p>
+
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
+              {/* Large scannable QR code */}
+              {selectedWallet.qrCodeImage && (
+                <button
+                  type="button"
+                  onClick={() => setQrModalOpen(true)}
+                  className="group relative flex-shrink-0 overflow-hidden rounded-xl border-2 border-[#D6D0C4] bg-white p-2 transition-colors hover:border-[#1F6F4F]"
+                >
+                  <Image
+                    src={selectedWallet.qrCodeImage}
+                    alt={`${selectedWallet.coinName} QR code`}
+                    width={160}
+                    height={160}
+                    className="h-40 w-40 object-contain"
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/0 text-xs font-medium text-white opacity-0 transition-opacity group-hover:bg-black/40 group-hover:opacity-100">
+                    Tap to enlarge
+                  </span>
+                </button>
+              )}
+
+              <div className="w-full space-y-3">
+                <div className="flex items-center gap-3 rounded-lg border border-[#D6D0C4] bg-white px-4 py-3">
+                  <p className="flex-1 break-all font-mono text-sm text-[#0E1A17]">
+                    {selectedWallet.walletAddress}
+                  </p>
+                  <CopyButton text={selectedWallet.walletAddress} />
+                </div>
+                <div className="flex items-start gap-2">
+                  <Info className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-amber-600" />
+                  <p className="text-[11px] leading-relaxed text-amber-800">
+                    Only send {selectedWallet.coinName} ({selectedWallet.network}) to this
+                    address. Sending the wrong asset may result in permanent loss.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
+        )}
+
+        {qrModalOpen && selectedWallet?.qrCodeImage && (
+          <QRCodeModal
+            src={selectedWallet.qrCodeImage}
+            coinName={selectedWallet.coinName}
+            onClose={() => setQrModalOpen(false)}
+          />
         )}
       </div>
 
