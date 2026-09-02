@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   Wallet, Clock, CheckCircle2, XCircle, PauseCircle,
   PlayCircle, Ban, Calendar, ChevronLeft, ChevronRight,
-  ChevronDown, TrendingUp, User,
+  ChevronDown, TrendingUp, User, PlusCircle,
 } from "lucide-react";
 import Image from "next/image";
 import {
@@ -13,11 +13,15 @@ import {
   useResumeInvestment,
   useCancelInvestment,
   useAdjustInvestmentDates,
+  useCreateInvestment,
+  useCreditProfit,
 } from "@/hooks/use-admin-investments";
-import type { AdminInvestment, AdjustDatesPayload } from "@/hooks/use-admin-investments";
+import type { AdminInvestment, AdjustDatesPayload, CreateInvestmentPayload, CreditProfitPayload } from "@/hooks/use-admin-investments";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { ConfirmActionDialog } from "@/components/admin/confirm-action-dialog";
 import { AdjustDatesDialog } from "@/components/admin/adjust-dates-dialog";
+import { CreateInvestmentDialog } from "@/components/admin/create-investment-dialog";
+import { CreditProfitDialog } from "@/components/admin/credit-profit-dialog";
 
 /* ─── helpers ─────────────────────────────────────────────────── */
 function formatMoney(n: number) {
@@ -95,12 +99,14 @@ function InvestmentRow({
   onResume,
   onCancel,
   onAdjustDates,
+  onCreditProfit,
 }: {
   inv: AdminInvestment;
   onPause: () => void;
   onResume: () => void;
   onCancel: () => void;
   onAdjustDates: () => void;
+  onCreditProfit: () => void;
 }) {
   const [expanded, setExpanded] = useState(false);
   const cfg = STATUS_CONFIG[inv.status];
@@ -266,6 +272,14 @@ function InvestmentRow({
               <Calendar className="h-3.5 w-3.5" />
               Adjust dates
             </button>
+
+            <button
+              onClick={onCreditProfit}
+              className="flex items-center gap-1.5 rounded-lg border border-[#1F6F4F]/30 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-[#1F6F4F] hover:bg-emerald-100"
+            >
+              <TrendingUp className="h-3.5 w-3.5" />
+              {inv.profitCredited ? "Credit more profit" : "Credit profit"}
+            </button>
           </div>
         </div>
       )}
@@ -289,13 +303,16 @@ type DialogState =
   | { type: "pause";   inv: AdminInvestment }
   | { type: "resume";  inv: AdminInvestment }
   | { type: "cancel";  inv: AdminInvestment }
-  | { type: "dates";   inv: AdminInvestment };
+  | { type: "dates";   inv: AdminInvestment }
+  | { type: "profit";  inv: AdminInvestment }
+  | { type: "create" };
 
 export default function AdminInvestmentsPage() {
   const [tab, setTab] = useState<StatusFilter>("active");
   const [page, setPage] = useState(1);
   const [dialog, setDialog] = useState<DialogState>({ type: null });
   const [adjustId, setAdjustId] = useState("");
+  const [profitId, setProfitId] = useState("");
 
   const LIMIT = 15;
 
@@ -309,6 +326,8 @@ export default function AdminInvestmentsPage() {
   const resume  = useResumeInvestment();
   const cancel  = useCancelInvestment();
   const adjust  = useAdjustInvestmentDates(adjustId);
+  const create  = useCreateInvestment();
+  const creditProfit = useCreditProfit(profitId);
 
   const investments = data?.data ?? [];
   const totalPages  = data?.meta.totalPages ?? 1;
@@ -322,11 +341,20 @@ export default function AdminInvestmentsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="font-display text-2xl font-bold text-[#0E1A17]">Investments</h1>
-        <p className="mt-0.5 text-sm text-[#5B6661]">
-          View all user investments. Pause, resume, cancel, or adjust dates directly.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="font-display text-2xl font-bold text-[#0E1A17]">Investments</h1>
+          <p className="mt-0.5 text-sm text-[#5B6661]">
+            View all user investments. Pause, resume, cancel, or adjust dates directly.
+          </p>
+        </div>
+        <button
+          onClick={() => setDialog({ type: "create" })}
+          className="flex items-center gap-1.5 rounded-lg bg-[#1F6F4F] px-4 py-2 text-sm font-semibold text-white hover:bg-[#186040]"
+        >
+          <PlusCircle className="h-4 w-4" />
+          New investment
+        </button>
       </div>
 
       {/* ── Table card ── */}
@@ -383,6 +411,10 @@ export default function AdminInvestmentsPage() {
               onAdjustDates={() => {
                 setAdjustId(inv._id);
                 setDialog({ type: "dates", inv });
+              }}
+              onCreditProfit={() => {
+                setProfitId(inv._id);
+                setDialog({ type: "profit", inv });
               }}
             />
           ))}
@@ -495,6 +527,25 @@ export default function AdminInvestmentsPage() {
         }}
         investment={dialog.type === "dates" ? dialog.inv : null}
         loading={adjust.isPending}
+      />
+
+      <CreateInvestmentDialog
+        open={dialog.type === "create"}
+        onClose={closeDialog}
+        onConfirm={(payload: CreateInvestmentPayload) => {
+          create.mutate(payload, { onSuccess: closeDialog });
+        }}
+        loading={create.isPending}
+      />
+
+      <CreditProfitDialog
+        open={dialog.type === "profit"}
+        onClose={closeDialog}
+        onConfirm={(payload: CreditProfitPayload) => {
+          creditProfit.mutate(payload, { onSuccess: closeDialog });
+        }}
+        investment={dialog.type === "profit" ? dialog.inv : null}
+        loading={creditProfit.isPending}
       />
     </div>
   );
