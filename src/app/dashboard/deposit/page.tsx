@@ -183,7 +183,7 @@ function WalletCard({
         <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#0E1A17] text-xs font-bold text-emerald-400">
   {wallet.coinName?.trim().toLowerCase().includes("bitcoin") ? (
     <Image
-      src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png"
+      src="https://cdn.jsdelivr.net/gh/trustwallet/assets@master/blockchains/bitcoin/info/logo.png"
       alt="Bitcoin"
       width={40}
       height={40}
@@ -655,7 +655,7 @@ function DepositHistory() {
                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#0E1A17] text-[10px] font-bold text-emerald-400">
   {dep.wallet.coinName?.toLowerCase() === "bitcoin" ? (
     <Image
-      src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png"
+      src="https://cdn.jsdelivr.net/gh/trustwallet/assets@master/blockchains/bitcoin/info/logo.png"
       alt="Bitcoin"
       width={36}
       height={36}
