@@ -180,20 +180,27 @@ function WalletCard({
     >
       <div className="flex items-center gap-3">
         {/* QR / initials avatar */}
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#0E1A17] text-xs font-bold text-emerald-400 overflow-hidden">
-          {wallet.qrCodeImage ? (
-            <Image
-              src={wallet.qrCodeImage}
-              alt={wallet.coinName}
-              width={40}
-              height={40}
-              className="object-cover"
-            />
-          ) : (
-            initials
-          )}
-        </div>
-
+        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#0E1A17] text-xs font-bold text-emerald-400">
+  {wallet.coinName?.trim().toLowerCase().includes("bitcoin") ? (
+    <Image
+      src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png"
+      alt="Bitcoin"
+      width={40}
+      height={40}
+      className="object-cover"
+    />
+  ) : wallet.qrCodeImage ? (
+    <Image
+      src={wallet.qrCodeImage}
+      alt={wallet.coinName}
+      width={40}
+      height={40}
+      className="object-cover"
+    />
+  ) : (
+    initials
+  )}
+</div>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold text-[#0E1A17]">{wallet.coinName}</p>
           <p className="text-[11px] text-[#5B6661]">{wallet.network}</p>
@@ -645,19 +652,28 @@ function DepositHistory() {
             >
               {/* Wallet */}
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-[#0E1A17] text-[10px] font-bold text-emerald-400 overflow-hidden">
-                  {dep.wallet.qrCodeImage ? (
-                    <Image
-                      src={dep.wallet.qrCodeImage}
-                      alt={dep.wallet.coinName}
-                      width={36}
-                      height={36}
-                      className="object-cover"
-                    />
-                  ) : (
-                    dep.wallet.network.slice(0, 2).toUpperCase()
-                  )}
-                </div>
+               <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#0E1A17] text-[10px] font-bold text-emerald-400">
+  {dep.wallet.coinName?.toLowerCase() === "bitcoin" ? (
+    <Image
+      src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/bitcoin/info/logo.png"
+      alt="Bitcoin"
+      width={36}
+      height={36}
+      className="object-cover"
+    />
+  ) : dep.wallet.qrCodeImage ? (
+    <Image
+      src={dep.wallet.qrCodeImage}
+      alt={dep.wallet.coinName}
+      width={36}
+      height={36}
+      className="object-cover"
+    />
+  ) : (
+    dep.wallet.network.slice(0, 2).toUpperCase()
+  )}
+</div>
+
                 <div>
                   <p className="text-sm font-semibold text-[#0E1A17]">
                     {dep.wallet.coinName}
