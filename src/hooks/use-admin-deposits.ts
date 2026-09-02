@@ -20,6 +20,13 @@ export interface AdminDeposit {
   reviewedBy?: string;
 }
 
+export interface EditDepositPayload {
+  amount?: number;
+  coinName?: string;
+  network?: string;
+  createdAt?: string; // ISO string — backdate or frontdate
+}
+
 interface QueryAdminDepositsParams {
   page?: number;
   limit?: number;
@@ -67,5 +74,21 @@ export function useRejectDeposit() {
     },
     onError: (err: any) =>
       toast.error(err?.response?.data?.message || "Failed to reject deposit."),
+  });
+}
+
+export function useEditDeposit() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: EditDepositPayload }) =>
+      adminApi.patch(`/deposits/admin/${id}/edit`, payload).then((r) => r.data),
+    onSuccess: () => {
+      toast.success("Deposit updated.");
+      queryClient.invalidateQueries({ queryKey: ["admin", "deposits"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+    onError: (err: any) =>
+      toast.error(err?.response?.data?.message || "Failed to update deposit."),
   });
 }

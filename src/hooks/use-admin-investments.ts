@@ -33,6 +33,19 @@ export interface AdjustDatesPayload {
   maturityDate?: string;
 }
 
+export interface CreateInvestmentPayload {
+  userId: string;
+  planId: string;
+  amount: number;
+  startDate?: string;
+  deductFromBalance?: boolean;
+}
+
+export interface CreditProfitPayload {
+  amount: number;
+  reason: string;
+}
+
 interface QueryAdminInvestmentsParams {
   page?: number;
   limit?: number;
@@ -110,5 +123,38 @@ export function useAdjustInvestmentDates(id: string) {
     },
     onError: (err: any) =>
       toast.error(err?.response?.data?.message || "Failed to adjust dates."),
+  });
+}
+
+export function useCreateInvestment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreateInvestmentPayload) =>
+      adminApi.post(`/investments/admin/create`, payload).then((r) => r.data),
+    onSuccess: () => {
+      toast.success("Investment created for user.");
+      queryClient.invalidateQueries({ queryKey: ["admin", "investments"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "user"] });
+    },
+    onError: (err: any) =>
+      toast.error(err?.response?.data?.message || "Failed to create investment."),
+  });
+}
+
+export function useCreditProfit(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: CreditProfitPayload) =>
+      adminApi.patch(`/investments/admin/${id}/credit-profit`, payload).then((r) => r.data),
+    onSuccess: () => {
+      toast.success("Profit credited to user balance.");
+      queryClient.invalidateQueries({ queryKey: ["admin", "investments"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "overview"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "user"] });
+      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+    },
+    onError: (err: any) =>
+      toast.error(err?.response?.data?.message || "Failed to credit profit."),
   });
 }

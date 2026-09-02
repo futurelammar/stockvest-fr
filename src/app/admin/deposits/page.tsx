@@ -10,15 +10,18 @@ import {
   ChevronRight,
   Copy,
   CheckCheck,
+  Pencil,
 } from "lucide-react";
 import {
   useAdminDeposits,
   useApproveDeposit,
   useRejectDeposit,
+  useEditDeposit,
 } from "@/hooks/use-admin-deposits";
-import type { AdminDeposit } from "@/hooks/use-admin-deposits";
+import type { AdminDeposit, EditDepositPayload } from "@/hooks/use-admin-deposits";
 import { ProofImageViewer } from "@/components/admin/proof-image-viewer";
 import { ReviewDialog } from "@/components/admin/review-dialog";
+import { EditDepositDialog } from "@/components/admin/edit-deposit-dialog";
 
 function formatMoney(n: number) {
   return `$${n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -81,6 +84,7 @@ export default function AdminDepositsPage() {
   const [tab, setTab] = useState<StatusTab>("pending");
   const [page, setPage] = useState(1);
   const [review, setReview] = useState<ReviewState>(null);
+  const [editDeposit, setEditDeposit] = useState<AdminDeposit | null>(null);
 
   const LIMIT = 15;
 
@@ -92,6 +96,7 @@ export default function AdminDepositsPage() {
 
   const approveDeposit = useApproveDeposit();
   const rejectDeposit = useRejectDeposit();
+  const editDepositMutation = useEditDeposit();
 
   const deposits = data?.data ?? [];
   const totalPages = data?.meta.totalPages ?? 1;
@@ -106,6 +111,14 @@ export default function AdminDepositsPage() {
         { onSuccess: () => setReview(null) },
       );
     }
+  }
+
+  function handleEditConfirm(payload: EditDepositPayload) {
+    if (!editDeposit) return;
+    editDepositMutation.mutate(
+      { id: editDeposit._id, payload },
+      { onSuccess: () => setEditDeposit(null) },
+    );
   }
 
   const actionLoading = approveDeposit.isPending || rejectDeposit.isPending;
@@ -259,6 +272,14 @@ export default function AdminDepositsPage() {
                   </>
                 )}
 
+                <button
+                  onClick={() => setEditDeposit(dep)}
+                  className="flex items-center gap-1.5 rounded-lg border border-[#D6D0C4] bg-white px-3 py-1.5 text-xs font-semibold text-[#0E1A17] hover:bg-[#F7F4EE]"
+                >
+                  <Pencil className="h-3.5 w-3.5" />
+                  Edit
+                </button>
+
                 {dep.wallet?.walletAddress && (
                   <CopyAddress value={dep.wallet.walletAddress} />
                 )}
@@ -331,6 +352,15 @@ export default function AdminDepositsPage() {
         amount={review?.deposit.amount ?? 0}
         userName={review?.deposit.user?.fullName ?? ""}
         loading={actionLoading}
+      />
+
+      {/* Edit dialog */}
+      <EditDepositDialog
+        open={!!editDeposit}
+        onClose={() => setEditDeposit(null)}
+        onConfirm={handleEditConfirm}
+        deposit={editDeposit}
+        loading={editDepositMutation.isPending}
       />
     </div>
   );
