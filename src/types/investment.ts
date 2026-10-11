@@ -1,6 +1,6 @@
 import type { Stock } from "./stock";
 
-export type InvestmentStatusValue = "active" | "completed" | "cancelled";
+export type InvestmentStatusValue = "active" | "paused" | "completed" | "cancelled";
 
 export interface InvestmentPlanRef {
   _id: string;
