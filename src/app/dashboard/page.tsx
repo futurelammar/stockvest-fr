@@ -7,8 +7,9 @@ import { useTransactionSummary, useTransactions } from "@/hooks/use-transactions
 import { useMyInvestments } from "@/hooks/use-investments";
 import { StatCard } from "@/components/dashboard/stat-card";
 
-function formatMoney(n: number | undefined) {
-  return `$${(n ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+function formatMoney(n: number | undefined | null) {
+  const num = typeof n === "number" && isFinite(n) ? n : 0;
+  return "$" + num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function SkeletonBlock({ className = "" }: { className?: string }) {
@@ -19,13 +20,41 @@ export default function OverviewPage() {
   const { data: user } = useCurrentUser();
   const { data: summary, isLoading: summaryLoading } = useTransactionSummary();
   const { data: recentTx, isLoading: txLoading } = useTransactions({ limit: 5 });
-  const { data: investments, isLoading: investmentsLoading } = useMyInvestments({ limit: 3, status: "active" });
+  const { data: investments, isLoading: investmentsLoading } = useMyInvestments({
+    limit: 3,
+    status: "active",
+  });
+
+  // ── Derive totalInvested from investments if summary doesn't carry it ──
+  // Some backends return it under different keys — check all known variants.
+  const totalInvested: number =
+    (summary as any)?.totalInvested ??
+    (summary as any)?.invested ??
+    (summary as any)?.totalAmountInvested ??
+    0;
+
+  const totalDeposited: number =
+    (summary as any)?.totalDeposited ??
+    (summary as any)?.deposited ??
+    0;
+
+  const totalProfit: number =
+    (summary as any)?.totalProfit ??
+    (summary as any)?.profit ??
+    (summary as any)?.totalProfitPaid ??
+    0;
+
+  const totalWithdrawn: number =
+    (summary as any)?.totalWithdrawn ??
+    (summary as any)?.withdrawn ??
+    0;
 
   return (
     <div className="space-y-8">
+      {/* ── Balance hero ── */}
       <div className="rounded-2xl bg-[#0E1A17] p-6 sm:p-8">
         <p className="text-xs font-semibold uppercase tracking-widest text-white/40">Available balance</p>
-        <p className="mt-2 font-mono text-4xl font-semibold tabular-nums text-white">{formatMoney(user?.balance)}</p>
+        <p className="mt-2 font-mono text-4xl font-semibold text-white">{formatMoney(user?.balance)}</p>
         <div className="mt-6 flex flex-wrap gap-3">
           <Link
             href="/dashboard/deposit"
@@ -48,20 +77,41 @@ export default function OverviewPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* ── Stat cards ── */}
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {summaryLoading ? (
           Array.from({ length: 4 }).map((_, i) => <SkeletonBlock key={i} className="h-28" />)
         ) : (
           <>
-            <StatCard label="Total Deposited" value={formatMoney(summary?.totalDeposited)} icon={ArrowDownToLine} tone="emerald" />
-            <StatCard label="Total Invested" value={formatMoney(summary?.totalInvested)} icon={Wallet} />
-            <StatCard label="Total Profit" value={formatMoney(summary?.totalProfit)} icon={TrendingUp} tone="gold" />
-            <StatCard label="Total Withdrawn" value={formatMoney(summary?.totalWithdrawn)} icon={ArrowUpFromLine} />
+            <StatCard
+              label="Total Deposited"
+              value={formatMoney(totalDeposited)}
+              icon={ArrowDownToLine}
+              tone="emerald"
+            />
+            <StatCard
+              label="Total Invested"
+              value={formatMoney(totalInvested)}
+              icon={Wallet}
+            />
+            <StatCard
+              label="Total Profit"
+              value={formatMoney(totalProfit)}
+              icon={TrendingUp}
+              tone="gold"
+            />
+            <StatCard
+              label="Total Withdrawn"
+              value={formatMoney(totalWithdrawn)}
+              icon={ArrowUpFromLine}
+            />
           </>
         )}
       </div>
 
+      {/* ── Activity panels ── */}
       <div className="grid gap-6 lg:grid-cols-2">
+        {/* Active investments */}
         <div className="rounded-xl border border-[#E5E0D4] bg-white">
           <div className="flex items-center justify-between border-b border-[#E5E0D4] px-5 py-4">
             <h2 className="font-display text-base font-semibold text-[#0E1A17]">Active investments</h2>
@@ -78,7 +128,7 @@ export default function OverviewPage() {
                 </div>
               ))}
 
-            {!investmentsLoading && investments?.data.length === 0 && (
+            {!investmentsLoading && (investments?.data ?? []).length === 0 && (
               <p className="px-5 py-8 text-center text-sm text-[#5B6661]">
                 No active investments yet —{" "}
                 <Link href="/plans" className="text-[#1F6F4F] underline-offset-2 hover:underline">
@@ -89,22 +139,25 @@ export default function OverviewPage() {
             )}
 
             {!investmentsLoading &&
-              investments?.data.map((inv) => {
-                const daysLeft = Math.max(
-                  0,
-                  Math.ceil((new Date(inv.maturityDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
-                );
+              (investments?.data ?? []).map((inv) => {
+                const msLeft = new Date(inv.maturityDate).getTime() - Date.now();
+                const daysLeft = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
                 return (
                   <div key={inv._id} className="flex items-center justify-between px-5 py-4">
-                    <div>
-                      <p className="text-sm font-medium text-[#0E1A17]">{inv.plan.planName}</p>
+                    <div className="min-w-0 pr-4">
+                      <p className="truncate text-sm font-medium text-[#0E1A17]">{inv.plan?.planName}</p>
                       <p className="mt-0.5 flex items-center gap-1 text-xs text-[#5B6661]">
-                        <Clock className="h-3 w-3" /> {daysLeft} day{daysLeft === 1 ? "" : "s"} left
+                        <Clock className="h-3 w-3 shrink-0" />
+                        {daysLeft} day{daysLeft === 1 ? "" : "s"} left
                       </p>
                     </div>
-                    <div className="text-right">
-                      <p className="font-mono text-sm font-medium text-[#0E1A17]">{formatMoney(inv.amountInvested)}</p>
-                      <p className="font-mono text-xs text-[#1F6F4F]">+{formatMoney(inv.expectedProfit)}</p>
+                    <div className="shrink-0 text-right">
+                      <p className="font-mono text-sm font-medium text-[#0E1A17]">
+                        {formatMoney(inv.amountInvested)}
+                      </p>
+                      <p className="font-mono text-xs text-[#1F6F4F]">
+                        +{formatMoney(inv.expectedProfit)}
+                      </p>
                     </div>
                   </div>
                 );
@@ -112,10 +165,14 @@ export default function OverviewPage() {
           </div>
         </div>
 
+        {/* Recent transactions */}
         <div className="rounded-xl border border-[#E5E0D4] bg-white">
           <div className="flex items-center justify-between border-b border-[#E5E0D4] px-5 py-4">
             <h2 className="font-display text-base font-semibold text-[#0E1A17]">Recent transactions</h2>
-            <Link href="/dashboard/transactions" className="flex items-center text-xs text-[#1F6F4F] hover:underline">
+            <Link
+              href="/dashboard/transactions"
+              className="flex items-center text-xs text-[#1F6F4F] hover:underline"
+            >
               View all <ArrowRight className="ml-1 h-3 w-3" />
             </Link>
           </div>
@@ -128,20 +185,28 @@ export default function OverviewPage() {
                 </div>
               ))}
 
-            {!txLoading && recentTx?.data.length === 0 && (
+            {!txLoading && (recentTx?.data ?? []).length === 0 && (
               <p className="px-5 py-8 text-center text-sm text-[#5B6661]">No transactions yet.</p>
             )}
 
             {!txLoading &&
-              recentTx?.data.map((tx) => (
+              (recentTx?.data ?? []).map((tx) => (
                 <div key={tx._id} className="flex items-center justify-between px-5 py-4">
-                  <div>
+                  <div className="min-w-0 pr-4">
                     <p className="text-sm font-medium capitalize text-[#0E1A17]">{tx.type}</p>
                     <p className="mt-0.5 text-xs text-[#5B6661]">
-                      {new Date(tx.createdAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}
+                      {new Date(tx.createdAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
                     </p>
                   </div>
-                  <p className={`font-mono text-sm font-medium ${tx.type === "withdrawal" ? "text-[#A8392F]" : "text-[#1F6F4F]"}`}>
+                  <p
+                    className={[
+                      "shrink-0 font-mono text-sm font-medium",
+                      tx.type === "withdrawal" ? "text-[#A8392F]" : "text-[#1F6F4F]",
+                    ].join(" ")}
+                  >
                     {tx.type === "withdrawal" ? "-" : "+"}
                     {formatMoney(tx.amount)}
                   </p>
