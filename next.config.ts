@@ -17,7 +17,7 @@ const nextConfig = {
   // first-party. Safari (and every browser on iOS) blocks the cookie when the
   // API lives on a different site such as railway.app.
   async rewrites() {
-    const backend = process.env.BACKEND_URL || "https://stockvest-be-production.up.railway.app";
+    const backend = process.env.BACKEND_URL;
     return [
       {
         source: "/api/:path*",
