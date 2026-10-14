@@ -10,6 +10,15 @@ import type { Deposit } from "@/types/deposit";
 import type { Withdrawal } from "@/types/withdrawal";
 import { useRouter } from "next/navigation";
 
+export interface UserTotals {
+  totalDeposited: number;
+  totalInvested: number;
+  totalProfit: number;
+  totalWithdrawn: number;
+}
+
+export type UpdateUserTotalsPayload = Partial<UserTotals> & { reason: string };
+
 export function useAdminUser(id: string) {
   return useQuery({
     queryKey: ["admin", "user", id],
@@ -56,6 +65,18 @@ export function useAdminUserWithdrawals(id: string) {
         params: { limit: 100 },
       });
       return { ...data, data: data.data.filter((w: any) => w.user === id || w.user?._id === id) };
+    },
+    enabled: !!id,
+  });
+}
+
+// The totals the user sees on their own dashboard (deposited / invested / profit / withdrawn).
+export function useAdminUserSummary(id: string) {
+  return useQuery({
+    queryKey: ["admin", "user", id, "summary"],
+    queryFn: async () => {
+      const { data } = await adminApi.get<UserTotals>(`/transactions/admin/user/${id}/summary`);
+      return data;
     },
     enabled: !!id,
   });
@@ -125,6 +146,23 @@ export function useAdjustBalance(id: string) {
       invalidateUser(queryClient, id);
     },
     onError: (err: any) => toast.error(err?.response?.data?.message || "Failed to adjust balance."),
+  });
+}
+
+export function useUpdateUserTotals(id: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: UpdateUserTotalsPayload) =>
+      adminApi.patch(`/transactions/admin/user/${id}/totals`, payload).then((r) => r.data),
+    onSuccess: () => {
+      toast.success("User totals updated.");
+      // Refreshes the user detail, the totals shown in the dialog, and the overview.
+      invalidateUser(queryClient, id);
+    },
+    onError: (err: any) => {
+      const message = err?.response?.data?.message;
+      toast.error(Array.isArray(message) ? message.join(", ") : message || "Failed to update totals.");
+    },
   });
 }
 

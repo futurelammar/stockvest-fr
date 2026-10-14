@@ -12,6 +12,19 @@ function formatMoney(n: number | undefined | null) {
   return "$" + num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
+// The backend stores adjustments as "Admin balance adjustment: <reason>".
+// Users only need to see the reason itself.
+const ADJUSTMENT_PREFIX = "Admin balance adjustment:";
+
+function adjustmentReason(description?: string | null) {
+  const text = (description ?? "").trim();
+  if (!text) return "Adjustment";
+  if (text.startsWith(ADJUSTMENT_PREFIX)) {
+    return text.slice(ADJUSTMENT_PREFIX.length).trim() || "Adjustment";
+  }
+  return text;
+}
+
 function SkeletonBlock({ className = "" }: { className?: string }) {
   return <div className={`animate-pulse rounded-md bg-[#E5E0D4] ${className}`} />;
 }
@@ -190,28 +203,37 @@ export default function OverviewPage() {
             )}
 
             {!txLoading &&
-              (recentTx?.data ?? []).map((tx) => (
-                <div key={tx._id} className="flex items-center justify-between px-5 py-4">
-                  <div className="min-w-0 pr-4">
-                    <p className="text-sm font-medium capitalize text-[#0E1A17]">{tx.type}</p>
-                    <p className="mt-0.5 text-xs text-[#5B6661]">
-                      {new Date(tx.createdAt).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}
+              (recentTx?.data ?? []).map((tx) => {
+                const isAdjustment = tx.type === "adjustment";
+                return (
+                  <div key={tx._id} className="flex items-center justify-between px-5 py-4">
+                    <div className="min-w-0 pr-4">
+                      <p
+                        className={`text-sm font-medium text-[#0E1A17] ${
+                          isAdjustment ? "break-words" : "capitalize"
+                        }`}
+                      >
+                        {isAdjustment ? adjustmentReason(tx.description) : tx.type}
+                      </p>
+                      <p className="mt-0.5 text-xs text-[#5B6661]">
+                        {new Date(tx.createdAt).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </p>
+                    </div>
+                    <p
+                      className={[
+                        "shrink-0 font-mono text-sm font-medium",
+                        tx.type === "withdrawal" ? "text-[#A8392F]" : "text-[#1F6F4F]",
+                      ].join(" ")}
+                    >
+                      {tx.type === "withdrawal" ? "-" : "+"}
+                      {formatMoney(tx.amount)}
                     </p>
                   </div>
-                  <p
-                    className={[
-                      "shrink-0 font-mono text-sm font-medium",
-                      tx.type === "withdrawal" ? "text-[#A8392F]" : "text-[#1F6F4F]",
-                    ].join(" ")}
-                  >
-                    {tx.type === "withdrawal" ? "-" : "+"}
-                    {formatMoney(tx.amount)}
-                  </p>
-                </div>
-              ))}
+                );
+              })}
           </div>
         </div>
       </div>
