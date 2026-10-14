@@ -34,6 +34,19 @@ function fmtDate(iso: string) {
   });
 }
 
+// The backend stores adjustments as "Admin balance adjustment: <reason>".
+// Users only need to see the reason itself.
+const ADJUSTMENT_PREFIX = "Admin balance adjustment:";
+
+function adjustmentReason(description?: string | null) {
+  const text = (description ?? "").trim();
+  if (!text) return "Adjustment";
+  if (text.startsWith(ADJUSTMENT_PREFIX)) {
+    return text.slice(ADJUSTMENT_PREFIX.length).trim() || "Adjustment";
+  }
+  return text;
+}
+
 /* ─── Type config ──────────────────────────────────────────────── */
 const TYPE_CONFIG: Record<
   TransactionType,
@@ -167,6 +180,12 @@ function TransactionRow({ tx }: { tx: Transaction }) {
   const config = TYPE_CONFIG[tx.type] ?? TYPE_CONFIG.adjustment;
   const Icon = config.icon;
 
+  // Adjustments show the admin's reason as the title instead of the generic
+  // "Adjustment" label, and the date as the subtitle.
+  const isAdjustment = tx.type === "adjustment";
+  const title = isAdjustment ? adjustmentReason(tx.description) : config.label;
+  const subtitle = isAdjustment ? fmtDate(tx.createdAt) : tx.description || fmtDate(tx.createdAt);
+
   return (
     <div className="flex flex-col gap-3 border-b border-[#F1EDE2] px-5 py-4 last:border-0 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex min-w-0 items-center gap-3">
@@ -174,9 +193,9 @@ function TransactionRow({ tx }: { tx: Transaction }) {
           <Icon className={`h-4 w-4 ${config.color}`} />
         </div>
         <div className="min-w-0">
-          <p className="text-sm font-semibold text-[#0E1A17]">{config.label}</p>
+          <p className={`text-sm font-semibold text-[#0E1A17] ${isAdjustment ? "break-words" : ""}`}>{title}</p>
           <p className="mt-0.5 overflow-hidden text-ellipsis whitespace-nowrap text-xs text-[#5B6661]">
-            {tx.description || fmtDate(tx.createdAt)}
+            {subtitle}
           </p>
         </div>
       </div>

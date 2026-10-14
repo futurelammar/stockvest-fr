@@ -19,23 +19,27 @@ import {
   ArrowUpFromLine,
   BadgeCheck,
   ShieldAlert,
-  Trash2
+  Trash2,
+  Pencil,
 } from "lucide-react";
 import {
   useAdminUser,
   useAdminUserInvestments,
   useAdminUserDeposits,
   useAdminUserWithdrawals,
+  useAdminUserSummary,
   useBlockUser,
   useUnblockUser,
   useBlockWithdrawals,
   useUnblockWithdrawals,
   useAdjustBalance,
   useUpdateUserRole,
-  useDeleteUser 
+  useUpdateUserTotals,
+  useDeleteUser,
 } from "@/hooks/use-admin-users";
 import { ConfirmActionDialog } from "@/components/admin/confirm-action-dialog";
 import { AdjustBalanceDialog } from "@/components/admin/adjust-balance-dialog";
+import { EditTotalsDialog } from "@/components/admin/edit-totals-dialog";
 
 function formatMoney(n: number | undefined) {
   return `$${(n ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -57,6 +61,7 @@ type DialogState =
   | { type: "block-withdrawals" }
   | { type: "unblock-withdrawals" }
   | { type: "adjust-balance" }
+  | { type: "edit-totals" }
   | { type: "change-role"; toRole: "admin" | "user" };
 
 export default function AdminUserDetailPage() {
@@ -70,6 +75,7 @@ export default function AdminUserDetailPage() {
   const { data: investments, isLoading: investmentsLoading } = useAdminUserInvestments(userId);
   const { data: deposits, isLoading: depositsLoading } = useAdminUserDeposits(userId);
   const { data: withdrawals, isLoading: withdrawalsLoading } = useAdminUserWithdrawals(userId);
+  const { data: totals } = useAdminUserSummary(userId);
 
   const blockUser = useBlockUser(userId);
   const unblockUser = useUnblockUser(userId);
@@ -77,8 +83,9 @@ export default function AdminUserDetailPage() {
   const unblockWithdrawals = useUnblockWithdrawals(userId);
   const adjustBalance = useAdjustBalance(userId);
   const updateRole = useUpdateUserRole(userId);
+  const updateTotals = useUpdateUserTotals(userId);
   const deleteUser = useDeleteUser(userId);
- const [deletingUser, setDeletingUser] = useState(false);
+  const [deletingUser, setDeletingUser] = useState(false);
 
   function closeDialog() {
     setDialog({ type: null });
@@ -108,7 +115,8 @@ export default function AdminUserDetailPage() {
     blockWithdrawals.isPending ||
     unblockWithdrawals.isPending ||
     adjustBalance.isPending ||
-    updateRole.isPending;
+    updateRole.isPending ||
+    updateTotals.isPending;
 
   return (
     <div className="space-y-6">
@@ -236,6 +244,14 @@ export default function AdminUserDetailPage() {
             <DollarSign className="h-4 w-4" /> Adjust balance
           </button>
 
+          <button
+            onClick={() => setDialog({ type: "edit-totals" })}
+            disabled={!totals}
+            className="flex items-center gap-2 rounded-lg border border-[#D6D0C4] bg-white px-3.5 py-2 text-sm font-medium text-[#0E1A17] transition-colors hover:bg-[#F7F4EE] disabled:opacity-50"
+          >
+            <Pencil className="h-4 w-4" /> Edit totals
+          </button>
+
           {user.role === "user" ? (
             <button
               onClick={() => setDialog({ type: "change-role", toRole: "admin" })}
@@ -252,14 +268,14 @@ export default function AdminUserDetailPage() {
             </button>
           )}
           {/* Danger zone separator */}
-        <div className="h-px w-full bg-rose-100 my-1" />
+          <div className="my-1 h-px w-full bg-rose-100" />
 
-        <button
-          onClick={() => setDeletingUser(true)}
-          className="flex items-center gap-2 rounded-lg border border-[#A8392F]/40 bg-rose-50 px-3.5 py-2 text-sm font-medium text-[#A8392F] transition-colors hover:bg-rose-100"
-        >
-          <Trash2 className="h-4 w-4" /> Delete account
-        </button>
+          <button
+            onClick={() => setDeletingUser(true)}
+            className="flex items-center gap-2 rounded-lg border border-[#A8392F]/40 bg-rose-50 px-3.5 py-2 text-sm font-medium text-[#A8392F] transition-colors hover:bg-rose-100"
+          >
+            <Trash2 className="h-4 w-4" /> Delete account
+          </button>
         </div>
       </div>
 
@@ -436,16 +452,24 @@ export default function AdminUserDetailPage() {
         loading={adjustBalance.isPending}
       />
 
+      <EditTotalsDialog
+        open={dialog.type === "edit-totals"}
+        onClose={closeDialog}
+        current={totals}
+        loading={updateTotals.isPending}
+        onConfirm={(changes, reason) => updateTotals.mutate({ ...changes, reason }, { onSuccess: closeDialog })}
+      />
+
       <ConfirmActionDialog
-      open={deletingUser}
-      onClose={() => setDeletingUser(false)}
-      onConfirm={() => deleteUser.mutate()}
-      title="Permanently delete this user?"
-      description={`This will delete ${user?.fullName}'s account and cannot be undone. Their investments, deposits, withdrawals, and transaction history will remain in the database for record-keeping but this account will no longer be accessible.`}
-      confirmLabel="Delete permanently"
-      tone="danger"
-      loading={deleteUser.isPending}
-    />
+        open={deletingUser}
+        onClose={() => setDeletingUser(false)}
+        onConfirm={() => deleteUser.mutate()}
+        title="Permanently delete this user?"
+        description={`This will delete ${user?.fullName}'s account and cannot be undone. Their investments, deposits, withdrawals, and transaction history will remain in the database for record-keeping but this account will no longer be accessible.`}
+        confirmLabel="Delete permanently"
+        tone="danger"
+        loading={deleteUser.isPending}
+      />
     </div>
   );
 }
