@@ -19,6 +19,7 @@ import {
   Pause,
 } from "lucide-react";
 import { useMyInvestments } from "@/hooks/use-investments";
+import { useTransactionSummary } from "@/hooks/use-transactions";
 import type { Investment, InvestmentStatusValue } from "@/types/investment";
 
 /* ─── Helpers ──────────────────────────────────────────────────── */
@@ -283,11 +284,24 @@ function InvestmentDrawer({ inv, onClose }: { inv: Investment; onClose: () => vo
 }
 
 /* ─── Summary cards ────────────────────────────────────────────── */
-function SummaryCards({ investments }: { investments: Investment[] }) {
-  const active        = investments.filter((i) => i.status === "active" || i.status === "paused").length;
-  const completed     = investments.filter((i) => i.status === "completed").length;
-  const totalInvested = investments.reduce((s, i) => s + (i.amountInvested ?? 0), 0);
-  const totalProfit   = investments.filter((i) => i.profitCredited).reduce((s, i) => s + (i.expectedProfit ?? 0), 0);
+function SummaryCards({
+  investments,
+  summary,
+}: {
+  investments: Investment[];
+  summary?: { totalInvested?: number; totalProfit?: number };
+}) {
+  const active    = investments.filter((i) => i.status === "active" || i.status === "paused").length;
+  const completed = investments.filter((i) => i.status === "completed").length;
+
+  // Invested / profit come from the account summary (the same source as the
+  // overview and transactions pages) so admin edits show up here too.
+  // Falls back to summing the list while the summary is still loading.
+  const totalInvested =
+    summary?.totalInvested ?? investments.reduce((s, i) => s + (i.amountInvested ?? 0), 0);
+  const totalProfit =
+    summary?.totalProfit ??
+    investments.filter((i) => i.profitCredited).reduce((s, i) => s + (i.expectedProfit ?? 0), 0);
 
   return (
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
@@ -360,6 +374,7 @@ export default function InvestmentsPage() {
 
   // High-limit fetch for summary cards only — not shown in the table
   const { data: allData } = useMyInvestments({ page: 1, limit: 200 });
+  const { data: summary } = useTransactionSummary();
 
   const investments    = data?.data     ?? [];
   const totalPages     = data?.meta?.totalPages ?? 1;
@@ -389,7 +404,7 @@ export default function InvestmentsPage() {
       </div>
 
       {/* Summary cards */}
-      {allInvestments.length > 0 && <SummaryCards investments={allInvestments} />}
+      {allInvestments.length > 0 && <SummaryCards investments={allInvestments} summary={summary as any} />}
 
       {/* Table card */}
       <div className="rounded-xl border border-[#E5E0D4] bg-white">
