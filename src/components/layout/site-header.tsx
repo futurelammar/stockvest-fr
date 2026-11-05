@@ -148,7 +148,7 @@ export function SiteHeader() {
               {user ? (
                 <>
                   <Button asChild className="border border-emerald-300/40 bg-white/10 text-white hover:bg-white/20">
-                    <Link href="/dashboard/overview">Dashboard</Link>
+                    <Link href="/dashboard">Dashboard</Link>
                   </Button>
                   <Button variant="ghost" onClick={() => logout.mutate()} className="text-white/75 hover:bg-white/10 hover:text-white">
                     Sign out
